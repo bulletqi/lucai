@@ -25,7 +25,6 @@ public class GlobalExceptionHandler {
 			code = ((BusinessException) ex).getCode();
 		}
 		data.setCode(code);
-//		data.putContent("message",message);
 		data.setMessage(message);
 		return data;
 	}

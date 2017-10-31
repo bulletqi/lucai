@@ -23,4 +23,8 @@ public interface CameraMapper {
 
 	Integer countCamera(@Param("offset") Integer begin_page,
 							 @Param("rows") Integer page_size);
+
+	Camera getById(@Param("id")Integer id);
+
+	List<String> queryImg(@Param("id")Integer id);
 }

@@ -78,4 +78,12 @@
         </if>
     </select>
 
+    <select id="getById" resultType="com.netposa.lucai.domain.Camera">
+        SELECT * FROM camera where id = #{id};
+    </select>
+
+    <select id="queryImg" resultType="java.lang.String">
+        SELECT img FROM camera_img where cameraId = #{id};
+    </select>
+
 </mapper>

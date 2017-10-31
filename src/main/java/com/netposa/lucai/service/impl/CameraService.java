@@ -79,4 +79,16 @@ public class CameraService implements ICameraService {
 		return pageModel;
 	}
 
+	@Override
+	public CameraVo getCamera(Integer id) {
+		Camera camera = cameraMapper.getById(id);
+		if(camera != null){
+			CameraVo vo = new CameraVo();
+			BeanUtils.copyProperties(camera,vo);
+			vo.setFiles(cameraMapper.queryImg(id));//查询图片
+			return vo;
+		}
+		return null;
+	}
+
 }

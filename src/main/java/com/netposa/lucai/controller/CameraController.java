@@ -19,7 +19,7 @@ public class CameraController {
 	private ICameraService cameraService;
 
 	@PostMapping(value = "/save")
-	public ResponseData save(CameraVo cameraVo) {
+	public ResponseData saveCamera(CameraVo cameraVo) {
 		log.debug("摄像机参数：{}",cameraVo);
 		return ResponseData.bulid().putContent("camera",cameraService.save(cameraVo));
 	}
@@ -27,6 +27,11 @@ public class CameraController {
 	@GetMapping(value = "/query_camera")
 	public ResponseData queryCamera(PageInfo pageInfo) {
 		return ResponseData.bulid().setPageInfo(cameraService.queryCamera(pageInfo));
+	}
+
+	@GetMapping(value = "/get_camera/{id}")
+	public ResponseData getCamera(@PathVariable("id") Integer id) {
+		return ResponseData.bulid().putContent("camera",cameraService.getCamera(id));
 	}
 
 	@DeleteMapping(value = "/del_camera/{id}")
@@ -45,6 +50,5 @@ public class CameraController {
 		cameraService.delImg(fileName,id);
 		return ResponseData.bulid();
 	}
-
 
 }

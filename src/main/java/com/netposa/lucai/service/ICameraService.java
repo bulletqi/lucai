@@ -22,4 +22,6 @@ public interface ICameraService {
 
 	PageModel queryCamera(PageInfo pageInfo);
 
+	CameraVo getCamera(Integer id);
+
 }

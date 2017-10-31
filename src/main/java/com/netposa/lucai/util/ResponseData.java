@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 public class ResponseData {
 	public int code = 200;
 	private JSONObject data = new JSONObject();
-	private String message;
+	private String message = "成功";
 
 	public String getMessage() {
 		return message;
