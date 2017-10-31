@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.netposa.lucai.mapper.CameraMapper">
+
+    <insert id="save" keyProperty="id" parameterType="com.netposa.lucai.domain.Camera"
+            useGeneratedKeys="true">
+      INSERT INTO camera (
+            CODE,
+            NAME,
+            longitude,
+            latitude,
+            localtion,
+            toward,
+            type,
+            rodHeight,
+            rodLength,
+            remark,
+            userId
+      ) VALUES (
+            #{code},
+            #{name},
+            #{longitude},
+            #{latitude},
+            #{toward},
+            #{type},
+            #{rodHeight},
+            #{rodLength},
+            #{remark},
+            #{userId}
+      );
+  </insert>
+
+    <update id="update" parameterType="com.netposa.lucai.domain.Camera">
+        UPDATE camera
+        SET
+            code = #{code},
+            name = #{name},
+            longitude = #{longitude},
+            latitude = #{latitude},
+            toward = #{toward},
+            type = #{type},
+            rodHeight = #{rodHeight},
+            rodLength = #{rodLength},
+            remark = #{remark},
+            userId = #{userId}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="saveImg">
+        <foreach collection="files" item="file">
+            INSERT into camera_img (cameraId,img) values( #{id}, #{file} );
+        </foreach>
+    </insert>
+
+    <delete id="delImg">
+        DELETE FROM camera_img where img = #{fileName};
+    </delete>
+
+    <delete id="delImgByCameraId">
+        DELETE FROM camera_img where cameraId = #{id};
+    </delete>
+
+    <delete id="delCamera">
+        DELETE FROM camera where id = #{id};
+    </delete>
+
+    <select id="queryCamera" resultType="com.netposa.lucai.domain.Camera">
+        SELECT * FROM camera
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countCamera" resultType="java.lang.Integer">
+        SELECT count(*) FROM camera
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+</mapper>
