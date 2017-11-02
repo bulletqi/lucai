@@ -1,23 +1,30 @@
 package com.netposa.lucai.controller;
 
 
+import com.netposa.lucai.domain.User;
 import com.netposa.lucai.service.ICameraService;
 import com.netposa.lucai.util.PageInfo;
 import com.netposa.lucai.util.ResponseData;
 import com.netposa.lucai.vo.CameraVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+@Api(tags = "摄像机管理管理")
+@Slf4j
 @RestController
 @RequestMapping("/camera")
-@Slf4j
 public class CameraController {
 
 	@Autowired
 	private ICameraService cameraService;
 
+
+	@ApiOperation(value = "保存修改摄像机")
 	@PostMapping(value = "/save")
 	public ResponseData saveCamera(CameraVo cameraVo) {
 		log.debug("摄像机参数：{}",cameraVo);

@@ -22,7 +22,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.netposa" additivity="false" level="INFO">
+    <logger name="com.netposa" additivity="false" level="debug">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="TIME_FILE"/>
     </logger>

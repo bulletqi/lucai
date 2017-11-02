@@ -21,6 +21,7 @@
             #{name},
             #{longitude},
             #{latitude},
+            #{localtion},
             #{toward},
             #{type},
             #{rodHeight},

@@ -38,6 +38,10 @@ public class ImgUtils {
 		return basePath + File.separator + prefix + File.separator + fileName;
 	}
 
+	private static String getArchiveDir(String prefix) {
+		return basePath + File.separator + prefix;
+	}
+
 	private static String getFilePathTemp(String fileName) {
 		return basePath + File.separator + tempPath + File.separator + fileName ;
 	}
@@ -51,10 +55,10 @@ public class ImgUtils {
 	public static void archiveFile(String fileName, String prefix) {
 		try {
 			File srcfile = new File(getFilePathTemp(fileName));
-			File descfile = new File(getFilePath(fileName, prefix));
+			File descfile = new File(getArchiveDir(prefix));
 			FileUtils.moveFileToDirectory(srcfile, descfile, true);
 		} catch (IOException e) {
-			log.error(e.getMessage(), e);
+			log.error(String.format("文件归档失败:%s",e.getMessage()),e);
 		}
 	}
 
