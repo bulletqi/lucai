@@ -6,5 +6,5 @@ import java.util.List;
 
 public class BaseConstant {
 	public static List<String> cameraType = new ArrayList<>();
-	public static List<String> cameraAngle = new ArrayList<>();
+	public static List<String> cameraDirection = new ArrayList<>();
 }

@@ -8,6 +8,7 @@ import com.netposa.lucai.util.PageInfo;
 import com.netposa.lucai.util.PageModel;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.ImgVo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -35,16 +37,17 @@ public class CameraService implements ICameraService {
 		} else {
 			cameraMapper.update(camera); //update
 		}
-		List<String> files = cameraVo.getFiles();
-		if (!CollectionUtils.isEmpty(files)) {
+		String files = cameraVo.getFiles();
+		if (StringUtils.isNoneBlank(files)) {
+			List<String> filesList = Arrays.asList(files.split(","));
 			cameraMapper.delImgByCameraId(id); //先删除在增加
-			cameraMapper.saveImg(id, files);
-			this.archiveFile(id, files);
+			cameraMapper.saveImg(id, filesList);
+			this.archiveFile(id, filesList);
 		}
 		return id;
 	}
 
-	//文件归档
+	//文件归档,以摄像机id为文件夹进行归档
 	private void archiveFile(Integer id, List<String> files) {
 		for (String file : files) {
 			ImgUtils.archiveFile(file, id + "");
@@ -57,11 +60,14 @@ public class CameraService implements ICameraService {
 		return new ImgVo(pair.getLeft(), Base64Utils.encodeToString(pair.getRight()));
 	}
 
+
 	@Override
 	public void delImg(String imgId, String id) {
 		cameraMapper.delImg(imgId);
 		ImgUtils.delImg(imgId, id);
 	}
+
+
 
 	@Override
 	public void delCamera(Integer id) {
@@ -79,13 +85,17 @@ public class CameraService implements ICameraService {
 		return pageModel;
 	}
 
+
 	@Override
 	public CameraVo getCamera(Integer id) {
 		Camera camera = cameraMapper.getById(id);
 		if(camera != null){
 			CameraVo vo = new CameraVo();
 			BeanUtils.copyProperties(camera,vo);
-			vo.setFiles(cameraMapper.queryImg(id));//查询图片
+			List<String> files = cameraMapper.queryImg(id);
+			if(!CollectionUtils.isEmpty(files)){
+				vo.setFiles(StringUtils.join(files,",")); //摄像机图片
+			}
 			return vo;
 		}
 		return null;

@@ -11,7 +11,7 @@ public class Camera {
 	private Double latitude;
 	private String localtion;
 	private String toward; //朝向
-	private Integer type; // 类型
+	private String type; // 类型
 	private Double rodHeight; //杆高度
 	private Double rodLength; //杆长度
 	private String remark;

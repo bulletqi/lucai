@@ -37,13 +37,13 @@ public class SystemInitStartup implements ApplicationListener<ApplicationReadyEv
 		initFileDir();
 	}
 
-	public void ititConstant(){
+	private void ititConstant(){
 		InputStream fileStream = FileUtils.loadStream("/dict/dict.json");
 		try {
 			String dictInfo = IOUtils.toString(fileStream, Charset.forName("UTF-8"));
 			JSONObject jsonObject = JSON.parseObject(dictInfo);
 			BaseConstant.cameraType.addAll(jsonObject.getJSONArray("cameraType").toJavaList(String.class));
-			BaseConstant.cameraAngle.addAll(jsonObject.getJSONArray("cameraAngle").toJavaList(String.class));
+			BaseConstant.cameraDirection.addAll(jsonObject.getJSONArray("cameraDirection").toJavaList(String.class));
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}finally{
@@ -51,14 +51,14 @@ public class SystemInitStartup implements ApplicationListener<ApplicationReadyEv
 		}
 	}
 
-	public void initFileDir(){
+	private void initFileDir(){
 		//初始化文件存储目录,临时文件目录
 		SystemProperties.Img img = systemProperties.getImg();
 		ImgUtils.basePath = img.getLocation();
 		ImgUtils.tempPath = img.getTempDir();
 		File file = new File(ImgUtils.basePath + File.separator + ImgUtils.tempPath);
 		if (!file.exists()) {
-			boolean flag = file.mkdirs();
+			boolean flag = file.mkdirs(); //创建多级目录
 			if (!flag) {
 				throw new BusinessException("初始化文件存储目录失败");
 			}

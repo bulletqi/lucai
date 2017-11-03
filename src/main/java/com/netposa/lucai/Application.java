@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -21,17 +22,18 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-
-
 	@Bean
 	public Docket customDocket() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.apiInfo(apiInfo());
+		return new Docket(DocumentationType.SWAGGER_2).
+				select().
+				apis(RequestHandlerSelectors.basePackage(Application.class.getPackage().getName())).
+				build().
+				apiInfo(apiInfo());
 	}
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("路踩接口")
+				.title("路踩接口Api")
 				.build();
 	}
 
