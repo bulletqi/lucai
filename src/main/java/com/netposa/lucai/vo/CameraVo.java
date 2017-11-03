@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @ToString
 public class CameraVo {
-	@ApiParam("摄像机id")
+	@ApiParam("摄像机id,空为新增")
 	private Integer id;
 	@ApiParam("摄像机编码")
 	private String code;

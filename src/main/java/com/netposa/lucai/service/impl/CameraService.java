@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +34,8 @@ public class CameraService implements ICameraService {
 		Camera camera = new Camera();
 		BeanUtils.copyProperties(cameraVo, camera);
 		if (id == null) { //新增
-			id = cameraMapper.save(camera); //保存数据
+			cameraMapper.save(camera); //保存数据
+			id = camera.getId();
 		} else {
 			cameraMapper.update(camera); //update
 		}
@@ -68,10 +70,11 @@ public class CameraService implements ICameraService {
 	}
 
 
-
 	@Override
 	public void delCamera(Integer id) {
+		ImgUtils.delImgByCamera(id+"");
 		cameraMapper.delCamera(id);
+		cameraMapper.delImgByCameraId(id);
 	}
 
 	@Override
@@ -89,12 +92,12 @@ public class CameraService implements ICameraService {
 	@Override
 	public CameraVo getCamera(Integer id) {
 		Camera camera = cameraMapper.getById(id);
-		if(camera != null){
+		if (camera != null) {
 			CameraVo vo = new CameraVo();
-			BeanUtils.copyProperties(camera,vo);
+			BeanUtils.copyProperties(camera, vo);
 			List<String> files = cameraMapper.queryImg(id);
-			if(!CollectionUtils.isEmpty(files)){
-				vo.setFiles(StringUtils.join(files,",")); //摄像机图片
+			if (!CollectionUtils.isEmpty(files)) {
+				vo.setFiles(StringUtils.join(files, ",")); //摄像机图片
 			}
 			return vo;
 		}

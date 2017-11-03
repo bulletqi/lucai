@@ -25,7 +25,7 @@ public class CameraController {
 
 	@ApiOperation(value = "保存修改摄像机")
 	@PostMapping(value = "/save")
-	public ResponseData saveCamera(@RequestParam  CameraVo cameraVo) {
+	public ResponseData saveCamera(CameraVo cameraVo) {
 		log.debug("摄像机参数:{}",cameraVo);
 		return ResponseData.bulid().putContent("camera",cameraService.save(cameraVo));
 	}
