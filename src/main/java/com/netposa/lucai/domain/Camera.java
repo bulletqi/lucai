@@ -16,4 +16,5 @@ public class Camera {
 	private Double rodLength; //杆长度
 	private String remark;
 	private Integer userId; // 用户id
+	private Integer group;
 }

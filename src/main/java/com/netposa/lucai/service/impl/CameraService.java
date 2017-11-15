@@ -104,4 +104,9 @@ public class CameraService implements ICameraService {
 		return null;
 	}
 
+	@Override
+	public boolean existsCode(Integer id, String code) {
+		return cameraMapper.existsCode(id,code) > 0;
+	}
+
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-@Api(tags = "摄像机管理管理")
+@Api(tags = "摄像机管理")
 @Slf4j
 @RestController
 @RequestMapping("/camera")
@@ -51,6 +51,16 @@ public class CameraController {
 			@ApiParam("摄像机id") @PathVariable("id") Integer id) {
 		cameraService.delCamera(id);
 		return ResponseData.bulid();
+	}
+
+
+	@ApiOperation(value = "检查摄像机编号是否重复")
+	@GetMapping(value = "/is_exists_code")
+	public ResponseData existsCode(
+			@ApiParam("摄像机id") @RequestParam(required = false) Integer id ,
+			@ApiParam("摄像机编号") @RequestParam String code) {
+		cameraService.delCamera(id);
+		return ResponseData.bulid().putContent("isExists",cameraService.existsCode(id,code));
 	}
 
 	@ApiOperation(value = "上传图片")

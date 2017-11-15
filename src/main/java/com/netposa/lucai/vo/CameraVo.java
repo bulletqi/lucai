@@ -35,4 +35,6 @@ public class CameraVo {
 	private String remark;
 	@ApiParam("用户id")
 	private Integer userId;
+	@ApiParam("所属分组")
+	private Integer group;
 }

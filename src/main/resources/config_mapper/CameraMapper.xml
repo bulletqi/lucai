@@ -15,7 +15,8 @@
             rodHeight,
             rodLength,
             remark,
-            userId
+            userId,
+            group
       ) VALUES (
             #{code},
             #{name},
@@ -27,7 +28,8 @@
             #{rodHeight},
             #{rodLength},
             #{remark},
-            #{userId}
+            #{userId},
+            #{group}
       );
   </insert>
 
@@ -43,7 +45,8 @@
             rodHeight = #{rodHeight},
             rodLength = #{rodLength},
             remark = #{remark},
-            userId = #{userId}
+            userId = #{userId},
+            group = #{group}
         WHERE id = #{id}
     </update>
 
@@ -87,4 +90,10 @@
         SELECT img FROM camera_img where cameraId = #{id};
     </select>
 
+    <select id="existsCode" resultType="java.lang.Integer">
+        SELECT count(1) FROM camera where code = #{code}
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </select>
 </mapper>

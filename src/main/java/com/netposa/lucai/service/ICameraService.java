@@ -24,4 +24,6 @@ public interface ICameraService {
 
 	CameraVo getCamera(Integer id);
 
+	boolean existsCode(Integer id, String code);
+
 }

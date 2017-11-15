@@ -27,4 +27,6 @@ public interface CameraMapper {
 	Camera getById(@Param("id")Integer id);
 
 	List<String> queryImg(@Param("id")Integer id);
+
+	int existsCode(@Param("id")Integer id, @Param("code") String code);
 }

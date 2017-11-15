@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.netposa.lucai.mapper.GroupMapper">
+
+    <insert id="save" keyProperty="id" parameterType="com.netposa.lucai.domain.Group"
+            useGeneratedKeys="true">
+      INSERT INTO `group` ( NAME ) VALUES (#{name});
+  </insert>
+
+    <update id="update" parameterType="com.netposa.lucai.domain.Group">
+        UPDATE `group`
+        SET name = #{name}
+        WHERE id = #{id}
+    </update>
+
+    <select id="listGroup" resultType="com.netposa.lucai.domain.Group">
+        SELECT * FROM `group`
+    </select>
+
+    <select id="existsName" resultType="java.lang.Integer">
+        SELECT count(1) FROM `group` where name = #{name}
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </select>
+
+</mapper>

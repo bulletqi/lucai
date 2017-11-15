@@ -10,4 +10,42 @@
         <sqlFile path="init.sql" encoding="UTF-8" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="20171115" author="qilucheng">
+        <sql>
+            CREATE TABLE `group` (
+                `id` INT (11) NOT NULL AUTO_INCREMENT,
+                `name` varchar(100) DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+
+        <sql>
+            ALTER TABLE `camera` ADD COLUMN `group` int(11) NULL;
+        </sql>
+
+        <sql>
+            CREATE TABLE `dict` (
+            `id` INT (11) NOT NULL AUTO_INCREMENT,
+            `type` varchar(100) DEFAULT NULL,
+            `name` varchar(100) DEFAULT NULL,
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            insert into dict (type,name) values ("cameraType","标清枪机");
+            insert into dict (type,name) values ("cameraType","标清球机");
+            insert into dict (type,name) values ("cameraType","高清枪机");
+            insert into dict (type,name) values ("cameraType","高清球机");
+            insert into dict (type,name) values ("cameraType","卡口");
+            insert into dict (type,name) values ("cameraType","微卡口");
+            insert into dict (type,name) values ("cameraType","全景");
+            insert into dict (type,name) values ("cameraDirection","东");
+            insert into dict (type,name) values ("cameraDirection","东西");
+            insert into dict (type,name) values ("cameraDirection","西");
+            insert into dict (type,name) values ("cameraDirection","西南");
+            insert into dict (type,name) values ("cameraDirection","南");
+            insert into dict (type,name) values ("cameraDirection","南北");
+            insert into dict (type,name) values ("cameraDirection","北");
+            insert into dict (type,name) values ("cameraDirection","东北");
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
