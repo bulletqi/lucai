@@ -1,11 +1,8 @@
 package com.netposa.lucai.controller;
 
 
-import com.netposa.lucai.service.ICameraService;
 import com.netposa.lucai.service.IGroupService;
-import com.netposa.lucai.util.PageInfo;
 import com.netposa.lucai.util.ResponseData;
-import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.GroupVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +10,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @Api(tags = "分组管理")
