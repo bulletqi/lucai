@@ -1,18 +1,18 @@
-package com.netposa.lucai.util;
-
+package com.netposa.lucai.vo;
 
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class PageInfo {
-
+public class SearchCondition {
 	@ApiParam("当前页")
 	private Integer current_page;
-
 	@ApiParam("页大小")
 	private Integer page_size;
-	
+	@ApiParam("分组id")
+	private Integer groupId;
+
 	public Integer getBegin_page() {
 		if(current_page == null || page_size == null){
 			return null;

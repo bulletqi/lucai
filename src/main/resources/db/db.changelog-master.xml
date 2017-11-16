@@ -17,6 +17,11 @@
                 `name` varchar(100) DEFAULT NULL,
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            insert into `group` (name) values ("原标清点位");
+            insert into `group` (name) values ("原高清点位");
+            insert into `group` (name) values ("原113卡口点位");
+            insert into `group` (name) values ("雪亮一期治安摄像机");
+            insert into `group` (name) values ("雪亮一期113卡口");
         </sql>
 
         <sql>

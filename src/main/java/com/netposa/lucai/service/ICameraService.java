@@ -4,10 +4,10 @@
 package com.netposa.lucai.service;
 
 
-import com.netposa.lucai.util.PageInfo;
 import com.netposa.lucai.util.PageModel;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.ImgVo;
+import com.netposa.lucai.vo.SearchCondition;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ICameraService {
@@ -20,7 +20,7 @@ public interface ICameraService {
 
 	void delCamera(Integer id);
 
-	PageModel queryCamera(PageInfo pageInfo);
+	PageModel queryCamera(SearchCondition searchCondition);
 
 	CameraVo getCamera(Integer id);
 

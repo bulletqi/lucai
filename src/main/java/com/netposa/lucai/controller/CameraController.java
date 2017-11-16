@@ -2,9 +2,9 @@ package com.netposa.lucai.controller;
 
 
 import com.netposa.lucai.service.ICameraService;
-import com.netposa.lucai.util.PageInfo;
 import com.netposa.lucai.util.ResponseData;
 import com.netposa.lucai.vo.CameraVo;
+import com.netposa.lucai.vo.SearchCondition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,8 +33,8 @@ public class CameraController {
 
 	@ApiOperation(value = "查询摄像机")
 	@GetMapping(value = "/query_camera")
-	public ResponseData queryCamera(PageInfo pageInfo) {
-		return ResponseData.bulid().setPageInfo(cameraService.queryCamera(pageInfo));
+	public ResponseData queryCamera(SearchCondition searchCondition) {
+		return ResponseData.bulid().setPageInfo(cameraService.queryCamera(searchCondition));
 	}
 
 

@@ -4,16 +4,15 @@ import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.mapper.CameraMapper;
 import com.netposa.lucai.service.ICameraService;
 import com.netposa.lucai.util.ImgUtils;
-import com.netposa.lucai.util.PageInfo;
 import com.netposa.lucai.util.PageModel;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.ImgVo;
+import com.netposa.lucai.vo.SearchCondition;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,23 +77,21 @@ public class CameraService implements ICameraService {
 	}
 
 	@Override
-	public PageModel queryCamera(PageInfo pageInfo) {
+	public PageModel queryCamera(SearchCondition searchCondition) {
 		PageModel<Camera> pageModel = new PageModel<>();
-		pageModel.setTotalRecords(cameraMapper.countCamera(pageInfo.getBegin_page(),
-				pageInfo.getPage_size()));
-		pageModel.setList(cameraMapper.queryCamera(pageInfo.getBegin_page(),
-				pageInfo.getPage_size()));
-		pageModel.setPageNo(pageInfo.getCurrent_page());
+		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),
+				searchCondition.getPage_size(),searchCondition));
+		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),
+				searchCondition.getPage_size(),searchCondition));
+		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
 	}
 
 
 	@Override
 	public CameraVo getCamera(Integer id) {
-		Camera camera = cameraMapper.getById(id);
-		if (camera != null) {
-			CameraVo vo = new CameraVo();
-			BeanUtils.copyProperties(camera, vo);
+		CameraVo vo = cameraMapper.getById(id);
+		if (vo != null) {
 			List<String> files = cameraMapper.queryImg(id);
 			if (!CollectionUtils.isEmpty(files)) {
 				vo.setFiles(StringUtils.join(files, ",")); //摄像机图片

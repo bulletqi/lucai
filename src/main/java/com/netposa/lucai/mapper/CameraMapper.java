@@ -1,6 +1,8 @@
 package com.netposa.lucai.mapper;
 
 import com.netposa.lucai.domain.Camera;
+import com.netposa.lucai.vo.CameraVo;
+import com.netposa.lucai.vo.SearchCondition;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,12 +21,14 @@ public interface CameraMapper {
 	void delCamera(@Param("id") Integer id);
 
 	List<Camera> queryCamera(@Param("offset") Integer begin_page,
-							 @Param("rows") Integer page_size);
+							 @Param("rows") Integer page_size,
+							 @Param("search") SearchCondition searchCondition);
 
 	Integer countCamera(@Param("offset") Integer begin_page,
-							 @Param("rows") Integer page_size);
+						@Param("rows") Integer page_size,
+						@Param("search") SearchCondition searchCondition);
 
-	Camera getById(@Param("id")Integer id);
+	CameraVo getById(@Param("id")Integer id);
 
 	List<String> queryImg(@Param("id")Integer id);
 

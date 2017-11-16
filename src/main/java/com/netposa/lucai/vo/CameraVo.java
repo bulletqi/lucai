@@ -37,4 +37,6 @@ public class CameraVo {
 	private Integer userId;
 	@ApiParam("所属分组")
 	private Integer group;
+	@ApiParam(hidden=true)
+	private String groupName;//分组名称
 }

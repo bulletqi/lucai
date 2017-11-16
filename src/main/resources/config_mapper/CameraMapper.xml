@@ -70,6 +70,11 @@
 
     <select id="queryCamera" resultType="com.netposa.lucai.domain.Camera">
         SELECT * FROM camera
+        <where>
+            <if test="search.groupId != null">
+                `group` = #{search.groupId}
+            </if>
+        </where>
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
         </if>
@@ -77,13 +82,24 @@
 
     <select id="countCamera" resultType="java.lang.Integer">
         SELECT count(*) FROM camera
+        <where>
+            <if test="search.groupId != null">
+                `group` = #{search.groupId}
+            </if>
+        </where>
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
         </if>
     </select>
 
-    <select id="getById" resultType="com.netposa.lucai.domain.Camera">
-        SELECT * FROM camera where id = #{id};
+    <select id="getById" resultType="com.netposa.lucai.vo.CameraVo">
+        SELECT
+            a.* , b.NAME AS groupName
+        FROM
+            `camera` a
+        LEFT JOIN `group` b ON  a.`GROUP` = b.id
+        WHERE
+            a.id = #{id}
     </select>
 
     <select id="queryImg" resultType="java.lang.String">

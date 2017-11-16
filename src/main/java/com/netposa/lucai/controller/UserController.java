@@ -1,7 +1,5 @@
 package com.netposa.lucai.controller;
 
-
-import com.netposa.lucai.domain.User;
 import com.netposa.lucai.service.IUserService;
 import com.netposa.lucai.util.ResponseData;
 import io.swagger.annotations.Api;
