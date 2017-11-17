@@ -16,7 +16,7 @@
             rodLength,
             remark,
             userId,
-            group
+            `group`
       ) VALUES (
             #{code},
             #{name},
@@ -46,7 +46,7 @@
             rodLength = #{rodLength},
             remark = #{remark},
             userId = #{userId},
-            group = #{group}
+            `group` = #{group}
         WHERE id = #{id}
     </update>
 
