@@ -1,5 +1,6 @@
 package com.netposa.lucai.service.impl;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.exception.BusinessException;
@@ -16,16 +17,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+	摄像机模板导入
+ */
 @Slf4j
 @Service
 public class ExcelService implements IExcelService {
+
 	@Autowired
 	private CameraMapper cameraMapper;
 
 	private final int SAVE_DATA_THRESHOLD = 100 ;
-	/*
-	  解析摄像机数据
+
+	/**
+	 * 解析摄像机数据
 	 */
+	@Override
 	public void importCamerasData(MultipartFile file, Integer userId, Integer groupId) {
 		Workbook workbook ;
 		try {
@@ -36,7 +43,6 @@ public class ExcelService implements IExcelService {
 		Sheet hssfSheet = workbook.getSheetAt(0);
 		List<Camera> list = new ArrayList<>();
 		Camera camera ;
-		int dataCount = 0 ;
 		for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
 			Row hssfRow = hssfSheet.getRow(rowNum);
 			if (hssfRow != null && !isRowEmpty(hssfRow)) {
@@ -60,17 +66,25 @@ public class ExcelService implements IExcelService {
 				camera.setGroup(groupId);
 				camera.setUserId(userId);
 				list.add(camera);
-				dataCount ++ ;
 			}
 		}
+		this.saveDataBatch(list);
+	}
 
-		int allData = list.size();
-		List<String> codes = Lists.newArrayList();
-		for(int i = 0 ; i <= allData % SAVE_DATA_THRESHOLD ; ){
-			int endIndex = 0;
-			List<Camera> cameras = list.subList(i, endIndex);
-			for(Camera saveCamera: cameras){
-				String code = saveCamera.getCode();
+
+	private void saveDataBatch(List<Camera> list){
+		int dataSize = list.size();
+		List<String> codes;
+		for(int i = 0 ; i <= dataSize / SAVE_DATA_THRESHOLD ; i++){
+			int endIndex = (i+1) * SAVE_DATA_THRESHOLD;
+			int startIndex = i * SAVE_DATA_THRESHOLD;
+			if(list.size() - startIndex < SAVE_DATA_THRESHOLD){
+				endIndex = list.size();
+			}
+			codes =  Lists.newArrayList();
+			List<Camera> cameras = list.subList(startIndex, endIndex);
+			for(Camera camera: cameras){
+				String code = camera.getCode();
 				if(StringUtils.isNoneBlank(code)){
 					codes.add(code);
 				}
@@ -78,17 +92,16 @@ public class ExcelService implements IExcelService {
 			if(!codes.isEmpty()){
 				cameraMapper.delCameraByCode(codes);
 			}
-			cameraMapper.save(list);
+			cameraMapper.save(cameras);
 		}
-		log.info("总共导入{}条数据",allData);
+		log.info("总共导入{}条数据",dataSize);
 	}
-
 
 	private static boolean isRowEmpty(Row row) {
 		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
 			Cell cell = row.getCell(c);
-			if (cell != null && cell.getCellType() != XSSFCell.CELL_TYPE_BLANK)
-				return false;
+			if (cell != null && cell.getCellType() != XSSFCell.CELL_TYPE_BLANK){return false;}
+
 		}
 		return true;
 	}
