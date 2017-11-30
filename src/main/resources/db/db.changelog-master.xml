@@ -53,4 +53,11 @@
         </sql>
     </changeSet>
 
+    <changeSet id="20171130" author="qilucheng">
+        <sql>
+            insert into `group` (name) values ("雪亮一期人脸摄像机");
+            insert into `group` (name) values ("雪亮一期微卡口摄像机");
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

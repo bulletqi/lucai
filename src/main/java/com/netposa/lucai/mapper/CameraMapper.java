@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CameraMapper {
-	Integer save(Camera camera);
+	Integer save(@Param("list") List<Camera> camera);
 
 	void update(Camera camera);
 
@@ -33,4 +33,6 @@ public interface CameraMapper {
 	List<String> queryImg(@Param("id")Integer id);
 
 	int existsCode(@Param("id")Integer id, @Param("code") String code);
+
+	void delCameraByCode(@Param("codes") List<String> codes);
 }

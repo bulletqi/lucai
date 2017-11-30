@@ -28,6 +28,7 @@
         <guava.version>19.0</guava.version>
         <common.lang.version>3.4</common.lang.version>
         <swagger.version>2.7.0</swagger.version>
+        <poi.version>3.9</poi.version>
     </properties>
 
     <repositories>
@@ -112,6 +113,17 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>${poi.version}</version>
         </dependency>
 
     </dependencies>
