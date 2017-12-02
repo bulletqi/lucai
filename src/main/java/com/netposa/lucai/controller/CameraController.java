@@ -7,9 +7,7 @@ import com.netposa.lucai.util.ResponseData;
 import com.netposa.lucai.util.ResponseUtil;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.SearchCondition;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -93,7 +91,6 @@ public class CameraController {
 		cameraService.importExcel(file,userId,group);
 		return ResponseData.bulid();
 	}
-
 
 	@ApiOperation(value = "下载摄像机模板")
 	@GetMapping(value = "/download_excel")

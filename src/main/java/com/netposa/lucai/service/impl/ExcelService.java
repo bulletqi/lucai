@@ -1,7 +1,5 @@
 package com.netposa.lucai.service.impl;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.exception.BusinessException;
 import com.netposa.lucai.mapper.CameraMapper;
@@ -16,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 
 /**
 	摄像机模板导入
@@ -27,7 +27,7 @@ public class ExcelService implements IExcelService {
 	@Autowired
 	private CameraMapper cameraMapper;
 
-	private final int SAVE_DATA_THRESHOLD = 100 ;
+	private ForkJoinPool forkJoinPool = new ForkJoinPool();
 
 	/**
 	 * 解析摄像机数据
@@ -68,33 +68,8 @@ public class ExcelService implements IExcelService {
 				list.add(camera);
 			}
 		}
-		this.saveDataBatch(list);
-	}
-
-
-	private void saveDataBatch(List<Camera> list){
-		int dataSize = list.size();
-		List<String> codes;
-		for(int i = 0 ; i <= dataSize / SAVE_DATA_THRESHOLD ; i++){
-			int endIndex = (i+1) * SAVE_DATA_THRESHOLD;
-			int startIndex = i * SAVE_DATA_THRESHOLD;
-			if(list.size() - startIndex < SAVE_DATA_THRESHOLD){
-				endIndex = list.size();
-			}
-			codes =  Lists.newArrayList();
-			List<Camera> cameras = list.subList(startIndex, endIndex);
-			for(Camera camera: cameras){
-				String code = camera.getCode();
-				if(StringUtils.isNoneBlank(code)){
-					codes.add(code);
-				}
-			}
-			if(!codes.isEmpty()){
-				cameraMapper.delCameraByCode(codes);
-			}
-			cameraMapper.save(cameras);
-		}
-		log.info("总共导入{}条数据",dataSize);
+		forkJoinPool.invoke(new SaveDataTask(list));
+		log.info("总共导入{}条数据",list.size());
 	}
 
 	private static boolean isRowEmpty(Row row) {
@@ -116,6 +91,44 @@ public class ExcelService implements IExcelService {
 			return String.valueOf(xssfRow.getNumericCellValue());
 		} else {
 			return String.valueOf(xssfRow.getStringCellValue());
+		}
+	}
+
+
+	class SaveDataTask extends RecursiveAction {
+		private List<Camera> cameraList;
+
+		//数据大小阈值
+		int SAVE_DATA_THRESHOLD = 200;
+
+		SaveDataTask(List<Camera> cameraList){
+			this.cameraList = cameraList;
+		}
+
+		@Override
+		protected void compute() {
+			if (cameraList.size() <= SAVE_DATA_THRESHOLD) {
+				//处理保存逻辑
+				List<String> codes = new ArrayList<>();
+				for(Camera camera: cameraList){
+					String code = camera.getCode();
+					if(StringUtils.isNoneBlank(code)){
+						codes.add(code);
+					}
+				}
+				if(!codes.isEmpty()){
+					cameraMapper.delCameraByCode(codes);
+				}
+				cameraMapper.save(cameraList);
+			} else {
+				//进行数据切割
+				RecursiveAction excuteTask = new SaveDataTask(this.cameraList.subList(0, SAVE_DATA_THRESHOLD));
+				excuteTask.fork();
+
+				//剩余分割的任务
+				RecursiveAction forkTask = new SaveDataTask(this.cameraList.subList(SAVE_DATA_THRESHOLD, cameraList.size()));
+				forkTask.fork();
+			}
 		}
 	}
 
