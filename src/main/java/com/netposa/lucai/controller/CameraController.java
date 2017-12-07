@@ -49,8 +49,7 @@ public class CameraController {
 
 	@ApiOperation(value = "删除摄像机信息")
 	@DeleteMapping(value = "/del_camera/{id}")
-	public ResponseData delCamera(
-			@ApiParam("摄像机id") @PathVariable("id") Integer id) {
+	public ResponseData delCamera(@ApiParam("摄像机id") @PathVariable("id") Integer id) {
 		cameraService.delCamera(id);
 		return ResponseData.bulid();
 	}
