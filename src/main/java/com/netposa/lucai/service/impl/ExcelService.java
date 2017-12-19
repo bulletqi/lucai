@@ -51,18 +51,41 @@ public class ExcelService implements IExcelService {
 				camera.setName(value);
 				value = getValue(hssfRow.getCell(1));
 				if(StringUtils.isBlank(value)){
-					log.error("第{}行数据有误",rowNum);
-					break;
+					log.error("[第{}行数据有误]",rowNum);
+					continue;
 				}
 				camera.setLongitude(Double.parseDouble(value));
 				value = getValue(hssfRow.getCell(2));
 				if(StringUtils.isBlank(value)){
-					log.error("第{}行数据有误",rowNum);
-					break;
+					log.error("[第{}行数据有误]",rowNum);
+					continue;
 				}
 				camera.setLatitude(Double.parseDouble(value));
 				value = getValue(hssfRow.getCell(3));
 				camera.setCode(value);
+
+				value = getValue(hssfRow.getCell(4));
+				if(StringUtils.isNoneBlank(value)){
+					camera.setRodHeight(Double.parseDouble(value));
+				}
+
+				value = getValue(hssfRow.getCell(5));
+				if(StringUtils.isNoneBlank(value)){
+					camera.setRodLength(Double.parseDouble(value));
+				}
+
+				value = getValue(hssfRow.getCell(6));
+				camera.setRemark(value);
+
+				value = getValue(hssfRow.getCell(7));
+				camera.setLocaltion(value);
+
+				value = getValue(hssfRow.getCell(8));
+				camera.setToward(value);
+
+				value = getValue(hssfRow.getCell(9));
+				camera.setType(value);
+
 				camera.setGroup(groupId);
 				camera.setUserId(userId);
 				list.add(camera);
