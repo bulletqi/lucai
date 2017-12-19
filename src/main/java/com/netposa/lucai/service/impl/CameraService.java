@@ -1,8 +1,10 @@
 package com.netposa.lucai.service.impl;
 
+import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.mapper.CameraMapper;
 import com.netposa.lucai.service.ICameraService;
+import com.netposa.lucai.service.IExcelService;
 import com.netposa.lucai.util.ImgUtils;
 import com.netposa.lucai.util.PageModel;
 import com.netposa.lucai.vo.CameraDTO;
@@ -28,13 +30,16 @@ public class CameraService implements ICameraService {
 	@Autowired
 	private CameraMapper cameraMapper;
 
+	@Autowired
+	private IExcelService excelService;
+
 	@Override
 	public Integer save(CameraVo cameraVo) {
 		Integer id = cameraVo.getId();
 		Camera camera = new Camera();
 		BeanUtils.copyProperties(cameraVo, camera);
 		if (id == null) { //新增
-			cameraMapper.save(camera); //保存数据
+			cameraMapper.save(Lists.newArrayList(camera)); //保存数据
 			id = camera.getId();
 		} else {
 			cameraMapper.update(camera); //update
@@ -93,7 +98,8 @@ public class CameraService implements ICameraService {
 		if (vo != null) {
 			List<String> files = cameraMapper.queryImg(id);
 			if (!CollectionUtils.isEmpty(files)) {
-				vo.setFiles(StringUtils.join(files, ",")); //摄像机图片
+				//摄像机图片
+				vo.setFiles(StringUtils.join(files, ","));
 			}
 			return vo;
 		}
@@ -103,6 +109,12 @@ public class CameraService implements ICameraService {
 	@Override
 	public boolean existsCode(Integer id, String code) {
 		return cameraMapper.existsCode(id,code) > 0;
+	}
+
+
+	@Override
+	public void importExcel(MultipartFile file, Integer userId, Integer group) {
+		excelService.importCamerasData(file,userId,group);
 	}
 
 }

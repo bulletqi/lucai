@@ -4,7 +4,8 @@
 
     <insert id="save" keyProperty="id" parameterType="com.netposa.lucai.domain.Camera"
             useGeneratedKeys="true">
-      INSERT INTO camera (
+        <foreach collection="list" item="camera">
+            INSERT INTO camera (
             CODE,
             NAME,
             longitude,
@@ -17,21 +18,22 @@
             remark,
             userId,
             `group`
-      ) VALUES (
-            #{code},
-            #{name},
-            #{longitude},
-            #{latitude},
-            #{localtion},
-            #{toward},
-            #{type},
-            #{rodHeight},
-            #{rodLength},
-            #{remark},
-            #{userId},
-            #{group}
-      );
-  </insert>
+            ) VALUES (
+            #{camera.code},
+            #{camera.name},
+            #{camera.longitude},
+            #{camera.latitude},
+            #{camera.localtion},
+            #{camera.toward},
+            #{camera.type},
+            #{camera.rodHeight},
+            #{camera.rodLength},
+            #{camera.remark},
+            #{camera.userId},
+            #{camera.group}
+            );
+        </foreach>
+    </insert>
 
     <update id="update" parameterType="com.netposa.lucai.domain.Camera">
         UPDATE camera
@@ -123,5 +125,11 @@
     <select id="queryCameraIdByGroup" resultType="java.lang.Integer">
         SELECT id FROM camera where `group` = #{groupId}
     </select>
+
+    <delete id="delCameraByCode">
+        <foreach collection="codes" item="code">
+            DELETE FROM camera where code = #{code};
+        </foreach>
+    </delete>
 
 </mapper>

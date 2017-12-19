@@ -13,9 +13,9 @@
     <changeSet id="20171115" author="qilucheng">
         <sql>
             CREATE TABLE `group` (
-                `id` INT (11) NOT NULL AUTO_INCREMENT,
-                `name` varchar(100) DEFAULT NULL,
-                PRIMARY KEY (`id`)
+            `id` INT (11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(100) DEFAULT NULL,
+            PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             insert into `group` (name) values ("原标清点位");
             insert into `group` (name) values ("原高清点位");
@@ -53,11 +53,16 @@
         </sql>
     </changeSet>
 
+    <changeSet id="20171130" author="qilucheng">
+        <sql>
+            insert into `group` (name) values ("雪亮一期人脸摄像机");
+            insert into `group` (name) values ("雪亮一期微卡口摄像机");
+        </sql>
+    </changeSet>
 
     <changeSet id="20171218" author="qilucheng">
         <sql>
             ALTER TABLE `group` ADD COLUMN `color` varchar(10) default '1';
         </sql>
     </changeSet>
-
 </databaseChangeLog>

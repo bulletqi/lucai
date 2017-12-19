@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CameraMapper {
-	Integer save(Camera camera);
+	Integer save(@Param("list") List<Camera> camera);
 
 	void update(Camera camera);
 
@@ -36,5 +36,7 @@ public interface CameraMapper {
 	int existsCode(@Param("id")Integer id, @Param("code") String code);
 
 	List<Integer> queryCameraIdByGroup(@Param("groupId")Integer id);
+
+	void delCameraByCode(@Param("codes") List<String> codes);
 
 }

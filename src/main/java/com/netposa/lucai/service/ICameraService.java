@@ -28,4 +28,5 @@ public interface ICameraService {
 
 	boolean existsCode(Integer id, String code);
 
+	void importExcel(MultipartFile file, Integer userId, Integer group);
 }

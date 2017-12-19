@@ -68,13 +68,12 @@ public class ImgUtils {
 		}
 	}
 
-
-	public static boolean isExists(String fileName, String prefix) {
+	private static boolean isExists(String fileName, String prefix) {
 		return new File(basePath + File.separator
 				+ prefix + File.separator + fileName).exists();
 	}
 
 	public static void delImgByCamera(String id) {
-		new File(getArchiveDir(id)).delete();
+		FileUtils.deleteQuietly(new File(getArchiveDir(id)));
 	}
 }

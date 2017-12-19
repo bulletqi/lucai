@@ -2,16 +2,18 @@ package com.netposa.lucai.controller;
 
 
 import com.netposa.lucai.service.ICameraService;
+import com.netposa.lucai.util.FileUtils;
 import com.netposa.lucai.util.ResponseData;
+import com.netposa.lucai.util.ResponseUtil;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.SearchCondition;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Api(tags = "摄像机管理")
@@ -47,8 +49,7 @@ public class CameraController {
 
 	@ApiOperation(value = "删除摄像机信息")
 	@DeleteMapping(value = "/del_camera/{id}")
-	public ResponseData delCamera(
-			@ApiParam("摄像机id") @PathVariable("id") Integer id) {
+	public ResponseData delCamera(@ApiParam("摄像机id") @PathVariable("id") Integer id) {
 		cameraService.delCamera(id);
 		return ResponseData.bulid();
 	}
@@ -78,6 +79,22 @@ public class CameraController {
 			@ApiParam("摄像机id") @RequestParam String id) {
 		cameraService.delImg(fileName,id);
 		return ResponseData.bulid();
+	}
+
+	@ApiOperation(value = "摄像机模板导入")
+	@PostMapping(value = "/import_excel")
+	public ResponseData importExcel(
+			@ApiParam("模板文件")  @RequestParam MultipartFile file,
+			@ApiParam("用户Id")  @RequestParam Integer userId,
+			@ApiParam("所属分组")  @RequestParam Integer group) {
+		cameraService.importExcel(file,userId,group);
+		return ResponseData.bulid();
+	}
+
+	@ApiOperation(value = "下载摄像机模板")
+	@GetMapping(value = "/download_excel")
+	public void downloadExcel(HttpServletResponse response) throws Exception {
+		ResponseUtil.showExec(FileUtils.loadFile("/file/camera.xls"),"路踩摄像机模板",response);
 	}
 
 }
