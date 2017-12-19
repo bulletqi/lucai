@@ -17,4 +17,6 @@ public interface IGroupService {
 
 	boolean existsName(Integer id, String name);
 
+	void delete(Integer id);
+
 }

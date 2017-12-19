@@ -4,12 +4,13 @@
 
     <insert id="save" keyProperty="id" parameterType="com.netposa.lucai.domain.Group"
             useGeneratedKeys="true">
-      INSERT INTO `group` ( NAME ) VALUES (#{name});
+      INSERT INTO `group` ( NAME , color ) VALUES (#{name} , #{color});
   </insert>
 
     <update id="update" parameterType="com.netposa.lucai.domain.Group">
         UPDATE `group`
-        SET name = #{name}
+        SET name = #{name},
+        color = #{color},
         WHERE id = #{id}
     </update>
 
@@ -23,5 +24,10 @@
             and id = #{id}
         </if>
     </select>
+
+
+    <delete id="delete">
+        DELETE from `group` where id = #{id}
+    </delete>
 
 </mapper>

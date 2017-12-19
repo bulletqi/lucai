@@ -16,4 +16,5 @@ public interface GroupMapper {
 
 	int existsName(@Param("id")Integer id , @Param("name") String name);
 
+	void delete(Integer id);
 }

@@ -10,33 +10,32 @@ import java.util.List;
 @ToString
 public class CameraVo {
 	@ApiParam("摄像机id,空为新增")
-	private Integer id;
+	protected Integer id;
 	@ApiParam("摄像机编码")
-	private String code;
+	protected String code;
 	@ApiParam("摄像机名称")
-	private String name;
+	protected String name;
 	@ApiParam("经度")
-	private Double longitude;
+	protected Double longitude;
 	@ApiParam("纬度")
-	private Double latitude;
+	protected Double latitude;
 	@ApiParam("位置")
-	private String localtion;
+	protected String localtion;
 	@ApiParam("朝向")
-	private String toward;
+	protected String toward;
 	@ApiParam("摄像机类型")
-	private String type ;
+	protected String type ;
 	@ApiParam("杆高度")
-	private Double rodHeight;
+	protected Double rodHeight;
 	@ApiParam("杆长度")
-	private Double rodLength;
+	protected Double rodLength;
 	@ApiParam("图片名称 多个用逗号分隔")
-	private String files;
+	protected String files;
 	@ApiParam("备注")
-	private String remark;
+	protected String remark;
 	@ApiParam("用户id")
-	private Integer userId;
+	protected Integer userId;
 	@ApiParam("所属分组")
-	private Integer group;
-	@ApiParam(hidden=true)
-	private String groupName;//分组名称
+	protected Integer group;
+
 }

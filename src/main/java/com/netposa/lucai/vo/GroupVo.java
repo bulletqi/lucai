@@ -11,4 +11,6 @@ public class GroupVo {
 	private Integer id;
 	@ApiParam("名称")
 	private String name;
+	@ApiParam("分组颜色")
+	private String color;
 }

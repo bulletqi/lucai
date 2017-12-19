@@ -68,11 +68,16 @@
         DELETE FROM camera where id = #{id};
     </delete>
 
-    <select id="queryCamera" resultType="com.netposa.lucai.domain.Camera">
-        SELECT * FROM camera
+    <select id="queryCamera" resultType="com.netposa.lucai.vo.CameraDTO">
+        SELECT
+        a.* ,
+        b.NAME AS groupName ,
+        b.color
+        FROM camera a INNER JOIN `group` b
+        ON  a.`GROUP` = b.id
         <where>
             <if test="search.groupId != null">
-                `group` = #{search.groupId}
+               a.`group` = #{search.groupId}
             </if>
         </where>
         <if test="offset != null and rows != null">
@@ -92,12 +97,13 @@
         </if>
     </select>
 
-    <select id="getById" resultType="com.netposa.lucai.vo.CameraVo">
+    <select id="getById" resultType="com.netposa.lucai.vo.CameraDTO">
         SELECT
-            a.* , b.NAME AS groupName
+            a.* , b.NAME AS groupName ,
+            b.color
         FROM
             `camera` a
-        LEFT JOIN `group` b ON  a.`GROUP` = b.id
+        INNER JOIN `group` b ON  a.`GROUP` = b.id
         WHERE
             a.id = #{id}
     </select>
@@ -112,4 +118,10 @@
             and id = #{id}
         </if>
     </select>
+
+
+    <select id="queryCameraIdByGroup" resultType="java.lang.Integer">
+        SELECT id FROM camera where `group` = #{groupId}
+    </select>
+
 </mapper>

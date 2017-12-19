@@ -27,6 +27,13 @@ public class GroupController {
 		return ResponseData.bulid().putContent("group",groupService.save(groupVo));
 	}
 
+	@ApiOperation(value = "删除分组（分组下摄像机也删除）")
+	@PostMapping(value = "/delete/{id}")
+	public ResponseData delete(@PathVariable("id") Integer id) {
+		groupService.delete(id);
+		return ResponseData.bulid();
+	}
+
 	@ApiOperation(value = "查询所有分组")
 	@PostMapping(value = "/list")
 	public ResponseData listGroup() {

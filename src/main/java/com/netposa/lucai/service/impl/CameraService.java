@@ -5,6 +5,7 @@ import com.netposa.lucai.mapper.CameraMapper;
 import com.netposa.lucai.service.ICameraService;
 import com.netposa.lucai.util.ImgUtils;
 import com.netposa.lucai.util.PageModel;
+import com.netposa.lucai.vo.CameraDTO;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.ImgVo;
 import com.netposa.lucai.vo.SearchCondition;
@@ -78,11 +79,9 @@ public class CameraService implements ICameraService {
 
 	@Override
 	public PageModel queryCamera(SearchCondition searchCondition) {
-		PageModel<Camera> pageModel = new PageModel<>();
-		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),
-				searchCondition.getPage_size(),searchCondition));
-		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),
-				searchCondition.getPage_size(),searchCondition));
+		PageModel<CameraDTO> pageModel = new PageModel<>();
+		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
+		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
 		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
 	}
@@ -90,7 +89,7 @@ public class CameraService implements ICameraService {
 
 	@Override
 	public CameraVo getCamera(Integer id) {
-		CameraVo vo = cameraMapper.getById(id);
+		CameraDTO vo = cameraMapper.getById(id);
 		if (vo != null) {
 			List<String> files = cameraMapper.queryImg(id);
 			if (!CollectionUtils.isEmpty(files)) {

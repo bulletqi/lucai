@@ -16,10 +16,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody
 	public ResponseData goalException(Exception ex) {
-		log.error(String.format("服务异常:%s", ex.getMessage()), ex);
+		log.error(String.format("请求异常:%s", ex.getMessage()), ex);
 		ResponseData data = ResponseData.bulid();
 		int code = 500;
-		String message = "服务异常";
+		String message = "请求异常";
 		if (ex instanceof BusinessException) {
 			message = ex.getMessage();
 			code = ((BusinessException) ex).getCode();

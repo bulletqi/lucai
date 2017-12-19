@@ -53,4 +53,11 @@
         </sql>
     </changeSet>
 
+
+    <changeSet id="20171218" author="qilucheng">
+        <sql>
+            ALTER TABLE `group` ADD COLUMN `color` varchar(10) default '1';
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
