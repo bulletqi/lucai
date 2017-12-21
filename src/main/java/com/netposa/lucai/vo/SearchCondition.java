@@ -12,6 +12,9 @@ public class SearchCondition {
 	private Integer page_size;
 	@ApiParam("分组id")
 	private Integer groupId;
+	@ApiParam("点位名称(模糊搜素)")
+	private String cameraName;
+
 
 	public Integer getBegin_page() {
 		if(current_page == null || page_size == null){

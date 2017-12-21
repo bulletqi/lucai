@@ -1,6 +1,5 @@
 package com.netposa.lucai.vo;
 
-import com.netposa.lucai.domain.Camera;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.ToString;

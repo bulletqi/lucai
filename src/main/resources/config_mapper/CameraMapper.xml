@@ -81,6 +81,9 @@
             <if test="search.groupId != null">
                a.`group` = #{search.groupId}
             </if>
+            <if test="search.cameraName != null and search.cameraName != ''">
+                a.`name` like '%${search.cameraName}%'
+            </if>
         </where>
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
