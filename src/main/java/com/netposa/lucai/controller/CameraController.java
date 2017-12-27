@@ -94,7 +94,7 @@ public class CameraController {
 	@ApiOperation(value = "下载摄像机模板")
 	@GetMapping(value = "/download_excel")
 	public void downloadExcel(HttpServletResponse response) throws Exception {
-		ResponseUtil.showExec(FileUtils.loadFile("/file/camera.xls"),"路踩摄像机模板",response);
+		ResponseUtil.showExec(FileUtils.loadStream("/file/camera.xls"),"路踩摄像机模板",response);
 	}
 
 }
