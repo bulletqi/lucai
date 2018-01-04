@@ -69,17 +69,17 @@ public class CameraService implements ICameraService {
 
 
 	@Override
-	public void delImg(String imgId, String id) {
-		cameraMapper.delImg(imgId);
-		ImgUtils.delImg(imgId, id);
+	public void delImg(String fileName, String id) {
+		cameraMapper.delImg(fileName);
+		ImgUtils.delImg(fileName, id);
 	}
 
 
 	@Override
 	public void delCamera(Integer id) {
-		ImgUtils.delImgByCamera(id+"");
 		cameraMapper.delCamera(id);
 		cameraMapper.delImgByCameraId(id);
+		ImgUtils.delImgByCamera(id+"");
 	}
 
 	@Override

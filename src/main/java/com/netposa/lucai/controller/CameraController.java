@@ -60,7 +60,6 @@ public class CameraController {
 	public ResponseData existsCode(
 			@ApiParam("摄像机id") @RequestParam(required = false) Integer id ,
 			@ApiParam("摄像机编号") @RequestParam String code) {
-		cameraService.delCamera(id);
 		return ResponseData.bulid().putContent("isExists",cameraService.existsCode(id,code));
 	}
 

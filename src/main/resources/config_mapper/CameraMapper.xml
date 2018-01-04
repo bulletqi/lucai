@@ -42,6 +42,7 @@
             name = #{name},
             longitude = #{longitude},
             latitude = #{latitude},
+            `localtion` = #{localtion},
             toward = #{toward},
             type = #{type},
             rodHeight = #{rodHeight},
@@ -120,7 +121,7 @@
     <select id="existsCode" resultType="java.lang.Integer">
         SELECT count(1) FROM camera where code = #{code}
         <if test="id != null">
-            and id = #{id}
+            and id != #{id}
         </if>
     </select>
 

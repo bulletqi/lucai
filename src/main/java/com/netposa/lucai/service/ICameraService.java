@@ -18,7 +18,7 @@ public interface ICameraService {
 
 	ImgVo uploadImg(MultipartFile file);
 
-	void delImg(String imgId, String id);
+	void delImg(String fileName, String id);
 
 	void delCamera(Integer id);
 

@@ -22,7 +22,9 @@ public class ImgUtils {
 		InputStream in = null;
 		OutputStream out = null;
 		try {
-			fileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
+			String name = file.getOriginalFilename();
+			log.debug("上传的文件名为:{}",name);
+			fileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(name);
 			out = new FileOutputStream(getFilePathTemp(fileName));
 			in = file.getInputStream();
 			IOUtils.copy(in, out);
