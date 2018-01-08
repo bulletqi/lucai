@@ -1,6 +1,7 @@
 package com.netposa.lucai.mapper;
 
 import com.netposa.lucai.domain.Camera;
+import com.netposa.lucai.vo.CameraAttr;
 import com.netposa.lucai.vo.CameraDTO;
 import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.SearchCondition;
@@ -39,4 +40,9 @@ public interface CameraMapper {
 
 	void delCameraByCode(@Param("codes") List<String> codes);
 
+	void saveAttr(@Param("list") List<CameraAttr> cameraAttrs , @Param("cameraId") Integer cameraId);
+
+	List<CameraAttr> queryAttrs(@Param("id") Integer id);
+
+	void delAttr(Integer id);
 }

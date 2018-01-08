@@ -3,6 +3,7 @@ package com.netposa.lucai.vo;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class SearchCondition {
@@ -22,4 +23,5 @@ public class SearchCondition {
 		}
 		return (current_page-1) * page_size;
 	}
+
 }

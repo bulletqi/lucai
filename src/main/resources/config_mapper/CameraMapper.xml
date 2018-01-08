@@ -54,9 +54,11 @@
     </update>
 
     <insert id="saveImg">
-        <foreach collection="files" item="file">
-            INSERT into camera_img (cameraId,img) values( #{id}, #{file} );
-        </foreach>
+        <if test="files != null and files.size() != 0 ">
+            <foreach collection="files" item="file">
+                INSERT into camera_img (cameraId,img) values( #{id}, #{file} );
+            </foreach>
+        </if>
     </insert>
 
     <delete id="delImg">
@@ -71,19 +73,23 @@
         DELETE FROM camera where id = #{id};
     </delete>
 
+    <delete id="delAttr">
+        DELETE FROM camera_attr where cameraId = #{id};
+    </delete>
+
     <select id="queryCamera" resultType="com.netposa.lucai.vo.CameraDTO">
         SELECT
         a.* ,
         b.NAME AS groupName ,
         b.color
         FROM camera a INNER JOIN `group` b
-        ON  a.`GROUP` = b.id
+        ON a.`GROUP` = b.id
         <where>
             <if test="search.groupId != null">
-               a.`group` = #{search.groupId}
+                a.`group` = #{search.groupId}
             </if>
             <if test="search.cameraName != null and search.cameraName != ''">
-                a.`name` like '%${search.cameraName}%'
+                and a.`name` like '%${search.cameraName}%'
             </if>
         </where>
         <if test="offset != null and rows != null">
@@ -92,10 +98,15 @@
     </select>
 
     <select id="countCamera" resultType="java.lang.Integer">
-        SELECT count(*) FROM camera
+        SELECT count(1)
+        FROM camera a INNER JOIN `group` b
+        ON a.`GROUP` = b.id
         <where>
             <if test="search.groupId != null">
-                `group` = #{search.groupId}
+                a.`group` = #{search.groupId}
+            </if>
+            <if test="search.cameraName != null and search.cameraName != ''">
+                and a.`name` like '%${search.cameraName}%'
             </if>
         </where>
         <if test="offset != null and rows != null">
@@ -135,5 +146,17 @@
             DELETE FROM camera where code = #{code};
         </foreach>
     </delete>
+
+    <insert id="saveAttr">
+        <if test="list != null and list.size() != 0 ">
+            <foreach collection="list" item="item">
+                INSERT into camera_attr (cameraId , toward , `type`) values( #{cameraId}, #{item.toward} , #{item.type});
+            </foreach>
+        </if>
+    </insert>
+
+    <select id="queryAttrs" resultType="com.netposa.lucai.vo.CameraAttr">
+        SELECT * FROM camera_attr where `cameraId` = #{id}
+    </select>
 
 </mapper>

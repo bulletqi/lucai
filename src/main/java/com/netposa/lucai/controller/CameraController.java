@@ -33,7 +33,7 @@ public class CameraController {
 	}
 
 
-	@ApiOperation(value = "查询摄像机")
+	@ApiOperation(value = "查询摄像机(地图撒点，具体摄像机详细信息用详情接口)")
 	@GetMapping(value = "/query_camera")
 	public ResponseData queryCamera(SearchCondition searchCondition) {
 		return ResponseData.bulid().setPageInfo(cameraService.queryCamera(searchCondition));

@@ -65,4 +65,17 @@
             ALTER TABLE `group` ADD COLUMN `color` varchar(10) default '1';
         </sql>
     </changeSet>
+
+    <changeSet id="201800108" author="qilucheng">
+        <!-- 一杆多个，保存多个摄像机属性表 -->
+        <sql>
+            CREATE TABLE `camera_attr` (
+            `id` INT (11) NOT NULL AUTO_INCREMENT,
+            `cameraId` INT (11) DEFAULT NULL,
+            `toward` VARCHAR (255) DEFAULT NULL,
+            `type` VARCHAR (255) DEFAULT NULL,
+            PRIMARY KEY (`id`)
+            ) ENGINE = INNODB DEFAULT CHARSET = utf8;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

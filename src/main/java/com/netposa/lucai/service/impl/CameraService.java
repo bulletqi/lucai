@@ -1,5 +1,6 @@
 package com.netposa.lucai.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.mapper.CameraMapper;
@@ -7,24 +8,25 @@ import com.netposa.lucai.service.ICameraService;
 import com.netposa.lucai.service.IExcelService;
 import com.netposa.lucai.util.ImgUtils;
 import com.netposa.lucai.util.PageModel;
-import com.netposa.lucai.vo.CameraDTO;
-import com.netposa.lucai.vo.CameraVo;
-import com.netposa.lucai.vo.ImgVo;
-import com.netposa.lucai.vo.SearchCondition;
+import com.netposa.lucai.vo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 @Service
+@Slf4j
 public class CameraService implements ICameraService {
 
 	@Autowired
@@ -34,6 +36,7 @@ public class CameraService implements ICameraService {
 	private IExcelService excelService;
 
 	@Override
+	@Transactional
 	public Integer save(CameraVo cameraVo) {
 		Integer id = cameraVo.getId();
 		Camera camera = new Camera();
@@ -44,6 +47,8 @@ public class CameraService implements ICameraService {
 		} else {
 			cameraMapper.update(camera); //update
 		}
+		//保存一干多头信息
+		this.saveCameraAttr(camera.getId(),cameraVo.getAttr());
 		String files = cameraVo.getFiles();
 		if (StringUtils.isNoneBlank(files)) {
 			List<String> filesList = Arrays.asList(files.split(","));
@@ -52,6 +57,17 @@ public class CameraService implements ICameraService {
 			this.archiveFile(id, filesList);
 		}
 		return id;
+	}
+
+
+	private void saveCameraAttr(Integer cameraId, String attr) {
+		List<CameraAttr> cameraAttrs = new ArrayList<>();
+		try {
+			cameraAttrs = JSONArray.parseArray(attr, CameraAttr.class);
+		}catch (Exception e){
+			log.error("摄像机熟悉格式不正确:{}",attr);
+		}
+		cameraMapper.saveAttr(cameraAttrs,cameraId);
 	}
 
 	//文件归档,以摄像机id为文件夹进行归档
@@ -79,14 +95,15 @@ public class CameraService implements ICameraService {
 	public void delCamera(Integer id) {
 		cameraMapper.delCamera(id);
 		cameraMapper.delImgByCameraId(id);
+		cameraMapper.delAttr(id);
 		ImgUtils.delImgByCamera(id+"");
 	}
 
 	@Override
 	public PageModel queryCamera(SearchCondition searchCondition) {
 		PageModel<CameraDTO> pageModel = new PageModel<>();
-		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
 		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
+		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
 		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
 	}
@@ -97,10 +114,12 @@ public class CameraService implements ICameraService {
 		CameraDTO vo = cameraMapper.getById(id);
 		if (vo != null) {
 			List<String> files = cameraMapper.queryImg(id);
+			//摄像机图片
 			if (!CollectionUtils.isEmpty(files)) {
-				//摄像机图片
 				vo.setFiles(StringUtils.join(files, ","));
 			}
+			//一杆多头信息
+			vo.setAttrs(cameraMapper.queryAttrs(id));
 			return vo;
 		}
 		return null;

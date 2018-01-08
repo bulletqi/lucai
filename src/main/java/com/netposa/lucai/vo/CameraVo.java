@@ -29,13 +29,15 @@ public class CameraVo {
 	protected Double rodHeight;
 	@ApiParam("杆长度")
 	protected Double rodLength;
-	@ApiParam("图片名称 多个用逗号分隔")
+	@ApiParam("图片名称 多个用逗号分隔的字符串")
 	protected String files;
 	@ApiParam("备注")
 	protected String remark;
 	@ApiParam("用户id")
 	protected Integer userId;
-	@ApiParam("所属分组")
+	@ApiParam("所属分组id")
 	protected Integer group;
-
+	@ApiParam("一杆多头属性，字符串格式(json形式)" +
+			"\r\n例:[{type(摄像机属性):${type},toward(摄像机朝向):${toward}}]")
+	protected String attr;
 }
