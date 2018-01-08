@@ -54,11 +54,9 @@
     </update>
 
     <insert id="saveImg">
-        <if test="files != null and files.size() != 0 ">
-            <foreach collection="files" item="file">
-                INSERT into camera_img (cameraId,img) values( #{id}, #{file} );
-            </foreach>
-        </if>
+        <foreach collection="files" item="file">
+            INSERT into camera_img (cameraId,img) values( #{id}, #{file} );
+        </foreach>
     </insert>
 
     <delete id="delImg">
@@ -148,11 +146,9 @@
     </delete>
 
     <insert id="saveAttr">
-        <if test="list != null and list.size() != 0 ">
-            <foreach collection="list" item="item">
-                INSERT into camera_attr (cameraId , toward , `type`) values( #{cameraId}, #{item.toward} , #{item.type});
-            </foreach>
-        </if>
+        <foreach collection="list" item="item">
+            INSERT into camera_attr (cameraId , toward , `type`) values( #{cameraId}, #{item.toward} , #{item.type});
+        </foreach>
     </insert>
 
     <select id="queryAttrs" resultType="com.netposa.lucai.vo.CameraAttr">

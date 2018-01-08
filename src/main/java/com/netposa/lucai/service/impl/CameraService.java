@@ -47,8 +47,8 @@ public class CameraService implements ICameraService {
 		} else {
 			cameraMapper.update(camera); //update
 		}
-		//保存一干多头信息
-		this.saveCameraAttr(camera.getId(),cameraVo.getAttr());
+		//保存一杆多头信息
+		this.saveCameraAttr(id,cameraVo.getAttr());
 		String files = cameraVo.getFiles();
 		if (StringUtils.isNoneBlank(files)) {
 			List<String> filesList = Arrays.asList(files.split(","));
@@ -61,15 +61,14 @@ public class CameraService implements ICameraService {
 
 
 	private void saveCameraAttr(Integer cameraId, String attr) {
-		List<CameraAttr> cameraAttrs = new ArrayList<>();
 		try {
-			cameraAttrs = JSONArray.parseArray(attr, CameraAttr.class);
+			List<CameraAttr> cameraAttrs = JSONArray.parseArray(attr, CameraAttr.class);
+			//覆盖更新
+			cameraMapper.delAttr(cameraId);
+			cameraMapper.saveAttr(cameraAttrs,cameraId);
 		}catch (Exception e){
 			log.error("摄像机熟悉格式不正确:{}",attr);
 		}
-		//覆盖更新
-		cameraMapper.delAttr(cameraId);
-		cameraMapper.saveAttr(cameraAttrs,cameraId);
 	}
 
 	//文件归档,以摄像机id为文件夹进行归档
@@ -85,13 +84,11 @@ public class CameraService implements ICameraService {
 		return new ImgVo(pair.getLeft(), Base64Utils.encodeToString(pair.getRight()));
 	}
 
-
 	@Override
 	public void delImg(String fileName, String id) {
 		cameraMapper.delImg(fileName);
 		ImgUtils.delImg(fileName, id);
 	}
-
 
 	@Override
 	public void delCamera(Integer id) {
@@ -109,7 +106,6 @@ public class CameraService implements ICameraService {
 		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
 	}
-
 
 	@Override
 	public CameraVo getCamera(Integer id) {

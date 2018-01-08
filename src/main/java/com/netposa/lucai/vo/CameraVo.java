@@ -1,5 +1,6 @@
 package com.netposa.lucai.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.ToString;
@@ -38,6 +39,6 @@ public class CameraVo {
 	@ApiParam("所属分组id")
 	protected Integer group;
 	@ApiParam("一杆多头属性，字符串格式(json形式)" +
-			"\r\n例:[{type(摄像机属性):${type},toward(摄像机朝向):${toward}}]")
+			"例:[{type(摄像机属性):${type},toward(摄像机朝向):${toward}}]")
 	protected String attr;
 }
