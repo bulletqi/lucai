@@ -67,6 +67,8 @@ public class CameraService implements ICameraService {
 		}catch (Exception e){
 			log.error("摄像机熟悉格式不正确:{}",attr);
 		}
+		//覆盖更新
+		cameraMapper.delAttr(cameraId);
 		cameraMapper.saveAttr(cameraAttrs,cameraId);
 	}
 
