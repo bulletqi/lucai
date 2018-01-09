@@ -78,4 +78,12 @@
             ) ENGINE = INNODB DEFAULT CHARSET = utf8;
         </sql>
     </changeSet>
+
+
+    <changeSet id="201800109" author="qilucheng">
+        <!-- 增加排序字段 -->
+        <sql>
+            ALTER TABLE `group` ADD COLUMN `sort` INT (11) DEFAULT NULL;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

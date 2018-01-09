@@ -10,18 +10,18 @@
     <update id="update" parameterType="com.netposa.lucai.domain.Group">
         UPDATE `group`
         SET name = #{name},
-        color = #{color},
+        color = #{color}
         WHERE id = #{id}
     </update>
 
     <select id="listGroup" resultType="com.netposa.lucai.domain.Group">
-        SELECT * FROM `group`
+        SELECT * FROM `group` ORDER BY sort
     </select>
 
     <select id="existsName" resultType="java.lang.Integer">
         SELECT count(1) FROM `group` where name = #{name}
         <if test="id != null">
-            and id = #{id}
+            and id != #{id}
         </if>
     </select>
 

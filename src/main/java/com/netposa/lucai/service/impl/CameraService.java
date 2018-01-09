@@ -100,11 +100,24 @@ public class CameraService implements ICameraService {
 
 	@Override
 	public PageModel queryCamera(SearchCondition searchCondition) {
+		searchCondition = this.buildParam(searchCondition);
 		PageModel<CameraDTO> pageModel = new PageModel<>();
 		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
 		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
 		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
+	}
+
+	private SearchCondition buildParam(SearchCondition searchCondition) {
+		String cameraName = searchCondition.getCameraName();
+		if(StringUtils.isNoneBlank(cameraName)){
+			searchCondition.setSearchName("%"+cameraName+"%");
+		}
+		String groupId = searchCondition.getGroupId();
+		if(StringUtils.isNoneBlank(groupId)){
+			searchCondition.setGroups(Arrays.asList(groupId.split(",")));
+		}
+		return searchCondition;
 	}
 
 	@Override
