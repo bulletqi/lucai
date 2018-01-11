@@ -1,11 +1,8 @@
 package com.netposa.lucai.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.ToString;
-
-import java.util.List;
 
 @Data
 @ToString

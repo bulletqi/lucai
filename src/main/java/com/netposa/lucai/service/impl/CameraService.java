@@ -1,5 +1,6 @@
 package com.netposa.lucai.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Camera;
@@ -67,7 +68,7 @@ public class CameraService implements ICameraService {
 			cameraMapper.delAttr(cameraId);
 			cameraMapper.saveAttr(cameraAttrs,cameraId);
 		}catch (Exception e){
-			log.error("摄像机熟悉格式不正确:{}",attr);
+			log.error("摄像机属性格式不正确:{}",attr);
 		}
 	}
 
@@ -130,7 +131,11 @@ public class CameraService implements ICameraService {
 				vo.setFiles(StringUtils.join(files, ","));
 			}
 			//一杆多头信息
-			vo.setAttrs(cameraMapper.queryAttrs(id));
+			List<CameraAttr> attrs = cameraMapper.queryAttrs(id);
+			if(!CollectionUtils.isEmpty(attrs)){
+				vo.setAttrs(attrs);
+				vo.setAttr(JSON.toJSONString(attrs));
+			}
 			return vo;
 		}
 		return null;
