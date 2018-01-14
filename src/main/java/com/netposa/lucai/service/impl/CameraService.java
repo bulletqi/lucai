@@ -13,6 +13,7 @@ import com.netposa.lucai.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,25 +51,30 @@ public class CameraService implements ICameraService {
 		}
 		//保存一杆多头信息
 		this.saveCameraAttr(id,cameraVo.getAttr());
-		String files = cameraVo.getFiles();
-		if (StringUtils.isNoneBlank(files)) {
-			List<String> filesList = Arrays.asList(files.split(","));
-			cameraMapper.delImgByCameraId(id); //先删除在增加
-			cameraMapper.saveImg(id, filesList);
-			this.archiveFile(id, filesList);
-		}
+		//保存图片信息
+		this.saveCameraImg(id,cameraVo.getFiles());
 		return id;
 	}
 
-
 	private void saveCameraAttr(Integer cameraId, String attr) {
-		try {
-			List<CameraAttr> cameraAttrs = JSONArray.parseArray(attr, CameraAttr.class);
-			//覆盖更新
-			cameraMapper.delAttr(cameraId);
-			cameraMapper.saveAttr(cameraAttrs,cameraId);
-		}catch (Exception e){
-			log.error("摄像机属性格式不正确:{}",attr);
+		if(StringUtils.isNotBlank(attr)){
+			try {
+				List<CameraAttr> cameraAttrs = JSONArray.parseArray(attr, CameraAttr.class);
+				//覆盖更新
+				cameraMapper.delAttr(cameraId);
+				cameraMapper.saveAttr(cameraAttrs,cameraId);
+			}catch (Exception e){
+				log.error("一杆多头属性格式不正确:{}",attr);
+			}
+		}
+	}
+
+	private  void saveCameraImg(Integer cameraId , String files){
+		if (StringUtils.isNoneBlank(files)) {
+			List<String> filesList = Arrays.asList(files.split(","));
+			cameraMapper.delImgByCameraId(cameraId); //先删除在增加
+			cameraMapper.saveImg(cameraId, filesList);
+			this.archiveFile(cameraId, filesList);
 		}
 	}
 
@@ -92,6 +98,7 @@ public class CameraService implements ICameraService {
 	}
 
 	@Override
+	@Transactional
 	public void delCamera(Integer id) {
 		cameraMapper.delCamera(id);
 		cameraMapper.delImgByCameraId(id);
