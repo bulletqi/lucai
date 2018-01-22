@@ -45,4 +45,6 @@ public interface CameraMapper {
 	List<CameraAttr> queryAttrs(@Param("id") Integer id);
 
 	void delAttr(Integer id);
+
+	Integer countCameraByGroup(@Param("groupId")Integer groupId);
 }

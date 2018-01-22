@@ -1,10 +1,13 @@
 package com.netposa.lucai.service.impl;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Group;
 import com.netposa.lucai.mapper.CameraMapper;
 import com.netposa.lucai.mapper.GroupMapper;
 import com.netposa.lucai.service.ICameraService;
 import com.netposa.lucai.service.IGroupService;
+import com.netposa.lucai.vo.GroupDTO;
 import com.netposa.lucai.vo.GroupVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +43,18 @@ public class GroupService implements IGroupService {
 	}
 
 	@Override
-	public List<Group> listGroup() {
-		return groupMapper.listGroup();
+	public List<GroupDTO> listGroup() {
+		List<Group> groups = groupMapper.listGroup();
+		return Lists.transform(groups, new Function<Group, GroupDTO>() {
+			@Override
+			public GroupDTO apply(Group group) {
+				//返回分组内摄像机个数
+				GroupDTO dto = new GroupDTO();
+				BeanUtils.copyProperties(group,dto);
+				dto.setCameraCount(cameraMapper.countCameraByGroup(group.getId()));
+				return dto;
+			}
+		});
 	}
 
 	@Override
