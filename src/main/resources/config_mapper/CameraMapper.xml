@@ -140,6 +140,15 @@
         </if>
     </select>
 
+    <select id="existsAttrCode" resultType="java.lang.Integer">
+        SELECT count(1) FROM camera_attr where code = #{code}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+        <if test="cameraId != null">
+            and cameraId != #{cameraId}
+        </if>
+    </select>
 
     <select id="queryCameraIdByGroup" resultType="java.lang.Integer">
         SELECT id FROM camera where `group` = #{groupId}
@@ -153,16 +162,37 @@
 
     <insert id="saveAttr">
         <foreach collection="list" item="item">
-            INSERT into camera_attr (cameraId , toward , `type`) values( #{cameraId}, #{item.toward} , #{item.type});
+            INSERT INTO camera_attr (
+            cameraId,
+            toward,
+            `type`,
+            `code`,
+            `groupId`
+            )
+            VALUES
+            (
+            #{cameraId}, #{item.toward} , #{item.type} ,#{item.code},#{item.groupId} );
         </foreach>
     </insert>
 
     <select id="queryAttrs" resultType="com.netposa.lucai.vo.CameraAttr">
-        SELECT * FROM camera_attr where `cameraId` = #{id}
+       SELECT
+            id AS attrId,
+            cameraId,
+            toward,
+            type,
+            CODE,
+            groupId
+       FROM
+            `camera_attr`;
     </select>
 
     <select id="countCameraByGroup" resultType="java.lang.Integer">
         SELECT count(1) FROM camera where `group` = #{groupId}
+    </select>
+
+    <select id="countCameraById" resultType="java.lang.Integer">
+        SELECT count(1) FROM camera_attr where `cameraId` = #{cameraId}
     </select>
 
 </mapper>

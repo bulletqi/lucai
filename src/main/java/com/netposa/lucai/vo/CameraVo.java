@@ -36,6 +36,6 @@ public class CameraVo {
 	@ApiParam("所属分组id")
 	protected Integer group;
 	@ApiParam("一杆多头属性，字符串格式(json形式)" +
-			"例:[{type(摄像机类型):${type},toward(摄像机朝向):${toward}}]")
+			"例:[{type(摄像机类型):${type},toward(摄像机朝向):${toward},code(摄像机编码):${code},groupId(所在分组):${groupId}}]")
 	protected String attr;
 }

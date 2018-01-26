@@ -86,4 +86,15 @@
             ALTER TABLE `group` ADD COLUMN `sort` INT (11) DEFAULT NULL;
         </sql>
     </changeSet>
+
+
+    <changeSet id="201800125" author="qilucheng">
+        <sql>
+            ALTER TABLE `camera_attr` ADD COLUMN `code` varchar(255) NULL;
+            ALTER TABLE `camera_attr` ADD COLUMN `groupId` int(11) NULL;
+        </sql>
+    </changeSet>
+
+
+
 </databaseChangeLog>

@@ -3,7 +3,6 @@ package com.netposa.lucai.mapper;
 import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.vo.CameraAttr;
 import com.netposa.lucai.vo.CameraDTO;
-import com.netposa.lucai.vo.CameraVo;
 import com.netposa.lucai.vo.SearchCondition;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,6 +35,8 @@ public interface CameraMapper {
 
 	int existsCode(@Param("id")Integer id, @Param("code") String code);
 
+	int existsAttrCode(@Param("id") Integer attrId,@Param("cameraId") Integer cameraId, @Param("code") String code);
+
 	List<Integer> queryCameraIdByGroup(@Param("groupId")Integer id);
 
 	void delCameraByCode(@Param("codes") List<String> codes);
@@ -47,4 +48,8 @@ public interface CameraMapper {
 	void delAttr(Integer id);
 
 	Integer countCameraByGroup(@Param("groupId")Integer groupId);
+
+	//一杆多头的点位
+	Integer countCameraById(@Param("cameraId")Integer cameraId);
+
 }

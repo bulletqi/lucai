@@ -10,8 +10,6 @@ import com.netposa.lucai.vo.ImgVo;
 import com.netposa.lucai.vo.SearchCondition;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 public interface ICameraService {
 
 	Integer save(CameraVo cameraVo);
@@ -26,7 +24,7 @@ public interface ICameraService {
 
 	CameraVo getCamera(Integer id);
 
-	boolean existsCode(Integer id, String code);
+	boolean existsCode(Integer id, Integer attrId, String code);
 
 	void importExcel(MultipartFile file, Integer userId, Integer group);
 }

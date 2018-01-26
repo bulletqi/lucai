@@ -18,4 +18,7 @@ public class CameraDTO extends CameraVo {
 
 	@ApiParam("一杆多头属性")
 	private List<CameraAttr>  attrs; // 摄像机属性
+
+	@ApiParam("一杆多头时统计摄像机个数")
+	private Integer cameraCount; //一杆多头时统计摄像机个数
 }

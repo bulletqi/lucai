@@ -2,6 +2,7 @@ package com.netposa.lucai.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.netposa.lucai.domain.Camera;
 import com.netposa.lucai.mapper.CameraMapper;
@@ -13,7 +14,6 @@ import com.netposa.lucai.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,6 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,26 +49,26 @@ public class CameraService implements ICameraService {
 			cameraMapper.update(camera); //update
 		}
 		//保存一杆多头信息
-		this.saveCameraAttr(id,cameraVo.getAttr());
+		this.saveCameraAttr(id, cameraVo.getAttr());
 		//保存图片信息
-		this.saveCameraImg(id,cameraVo.getFiles());
+		this.saveCameraImg(id, cameraVo.getFiles());
 		return id;
 	}
 
 	private void saveCameraAttr(Integer cameraId, String attr) {
-		if(StringUtils.isNotBlank(attr)){
+		if (StringUtils.isNotBlank(attr)) {
 			try {
 				List<CameraAttr> cameraAttrs = JSONArray.parseArray(attr, CameraAttr.class);
 				//覆盖更新
 				cameraMapper.delAttr(cameraId);
-				cameraMapper.saveAttr(cameraAttrs,cameraId);
-			}catch (Exception e){
-				log.error("一杆多头属性格式不正确:{}",attr);
+				cameraMapper.saveAttr(cameraAttrs, cameraId);
+			} catch (Exception e) {
+				log.error("一杆多头属性格式不正确:{}", attr);
 			}
 		}
 	}
 
-	private  void saveCameraImg(Integer cameraId , String files){
+	private void saveCameraImg(Integer cameraId, String files) {
 		if (StringUtils.isNoneBlank(files)) {
 			List<String> filesList = Arrays.asList(files.split(","));
 			cameraMapper.delImgByCameraId(cameraId); //先删除在增加
@@ -103,26 +102,37 @@ public class CameraService implements ICameraService {
 		cameraMapper.delCamera(id);
 		cameraMapper.delImgByCameraId(id);
 		cameraMapper.delAttr(id);
-		ImgUtils.delImgByCamera(id+"");
+		ImgUtils.delImgByCamera(id + "");
 	}
 
 	@Override
 	public PageModel queryCamera(SearchCondition searchCondition) {
 		searchCondition = this.buildParam(searchCondition);
 		PageModel<CameraDTO> pageModel = new PageModel<>();
-		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
-		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(),searchCondition));
+		List<CameraDTO> cameraList = cameraMapper.queryCamera(searchCondition.getBegin_page(),
+				searchCondition.getPage_size(), searchCondition);
+		List<CameraDTO> dtoList = Lists.transform(cameraList, new Function<CameraDTO, CameraDTO>() {
+			@Override
+			public CameraDTO apply(CameraDTO dto) {
+				Integer count = cameraMapper.countCameraById(dto.getId());
+				count = count == 0 ? 1: count;
+				dto.setCameraCount(count);
+				return dto;
+			}
+		});
+		pageModel.setList(dtoList);
+		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(), searchCondition.getPage_size(), searchCondition));
 		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
 	}
 
 	private SearchCondition buildParam(SearchCondition searchCondition) {
 		String cameraName = searchCondition.getCameraName();
-		if(StringUtils.isNoneBlank(cameraName)){
-			searchCondition.setSearchName("%"+cameraName+"%");
+		if (StringUtils.isNoneBlank(cameraName)) {
+			searchCondition.setSearchName("%" + cameraName + "%");
 		}
 		String groupId = searchCondition.getGroupId();
-		if(StringUtils.isNoneBlank(groupId)){
+		if (StringUtils.isNoneBlank(groupId)) {
 			searchCondition.setGroups(Arrays.asList(groupId.split(",")));
 		}
 		return searchCondition;
@@ -139,7 +149,7 @@ public class CameraService implements ICameraService {
 			}
 			//一杆多头信息
 			List<CameraAttr> attrs = cameraMapper.queryAttrs(id);
-			if(!CollectionUtils.isEmpty(attrs)){
+			if (!CollectionUtils.isEmpty(attrs)) {
 				vo.setAttrs(attrs);
 				vo.setAttr(JSON.toJSONString(attrs));
 			}
@@ -149,14 +159,14 @@ public class CameraService implements ICameraService {
 	}
 
 	@Override
-	public boolean existsCode(Integer id, String code) {
-		return cameraMapper.existsCode(id,code) > 0;
+	public boolean existsCode(Integer id, Integer attrId, String code) {
+		return cameraMapper.existsCode(id, code) > 0 ||
+				cameraMapper.existsAttrCode(attrId,id, code) > 0;
 	}
-
 
 	@Override
 	public void importExcel(MultipartFile file, Integer userId, Integer group) {
-		excelService.importCamerasData(file,userId,group);
+		excelService.importCamerasData(file, userId, group);
 	}
 
 }
