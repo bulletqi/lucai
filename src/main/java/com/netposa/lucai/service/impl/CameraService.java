@@ -22,8 +22,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -109,18 +108,7 @@ public class CameraService implements ICameraService {
 	public PageModel queryCamera(SearchCondition searchCondition) {
 		searchCondition = this.buildParam(searchCondition);
 		PageModel<CameraDTO> pageModel = new PageModel<>();
-		List<CameraDTO> cameraList = cameraMapper.queryCamera(searchCondition.getBegin_page(),
-				searchCondition.getPage_size(), searchCondition);
-		List<CameraDTO> dtoList = Lists.transform(cameraList, new Function<CameraDTO, CameraDTO>() {
-			@Override
-			public CameraDTO apply(CameraDTO dto) {
-				Integer count = cameraMapper.countCameraById(dto.getId());
-				count = count == 0 ? 1: count;
-				dto.setCameraCount(count);
-				return dto;
-			}
-		});
-		pageModel.setList(dtoList);
+		pageModel.setList(cameraMapper.queryCamera(searchCondition.getBegin_page(),searchCondition.getPage_size(), searchCondition));
 		pageModel.setTotalRecords(cameraMapper.countCamera(searchCondition.getBegin_page(), searchCondition.getPage_size(), searchCondition));
 		pageModel.setPageNo(searchCondition.getCurrent_page());
 		return pageModel;
@@ -167,6 +155,25 @@ public class CameraService implements ICameraService {
 	@Override
 	public void importExcel(MultipartFile file, Integer userId, Integer group) {
 		excelService.importCamerasData(file, userId, group);
+	}
+
+
+	@Override
+	public List<CodeDTO> existsCodeBatch(List<CodeVo> voList) {
+		final Set<String> codeSet = new HashSet<>();
+		return Lists.transform(voList, new Function<CodeVo, CodeDTO>() {
+			@Override
+			public CodeDTO apply(CodeVo codeVo) {
+				CodeDTO dto = new CodeDTO();
+				BeanUtils.copyProperties(codeVo,dto);
+				String code = dto.getCode();
+				if(!codeSet.contains(code)){
+					dto.setExists(existsCode(dto.getId(),dto.getAttrId(),code));
+				}
+				codeSet.add(code);
+				return dto;
+			}
+		});
 	}
 
 }

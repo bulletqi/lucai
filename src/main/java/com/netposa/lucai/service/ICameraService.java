@@ -5,10 +5,10 @@ package com.netposa.lucai.service;
 
 
 import com.netposa.lucai.util.PageModel;
-import com.netposa.lucai.vo.CameraVo;
-import com.netposa.lucai.vo.ImgVo;
-import com.netposa.lucai.vo.SearchCondition;
+import com.netposa.lucai.vo.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface ICameraService {
 
@@ -27,4 +27,6 @@ public interface ICameraService {
 	boolean existsCode(Integer id, Integer attrId, String code);
 
 	void importExcel(MultipartFile file, Integer userId, Integer group);
+
+	List<CodeDTO> existsCodeBatch(List<CodeVo> voList);
 }

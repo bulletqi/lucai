@@ -6,16 +6,17 @@ import com.netposa.lucai.util.FileUtils;
 import com.netposa.lucai.util.ResponseData;
 import com.netposa.lucai.util.ResponseUtil;
 import com.netposa.lucai.vo.CameraVo;
+import com.netposa.lucai.vo.CodeVo;
 import com.netposa.lucai.vo.SearchCondition;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.xmlbeans.impl.xb.ltgfmt.Code;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 @Api(tags = "摄像机管理")
@@ -64,6 +65,14 @@ public class CameraController {
 			@ApiParam("一杆多头id") @RequestParam(required = false) Integer attrId,
 			@ApiParam("摄像机编号") @RequestParam String code) {
 		return ResponseData.bulid().putContent("isExists", cameraService.existsCode(id, attrId, code));
+	}
+
+
+	@ApiOperation(value = "批量检查编号重复")
+	@PostMapping(value = "/is_exists_code_batch")
+	public ResponseData existsCodeBatch(
+			@ApiParam("校验对象(支持多个)") @RequestBody List<CodeVo> codeVo) {
+		return ResponseData.bulid().putContent("result", cameraService.existsCodeBatch(codeVo));
 	}
 
 	@ApiOperation(value = "上传图片")

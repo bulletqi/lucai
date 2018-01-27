@@ -77,11 +77,24 @@
 
     <select id="queryCamera" resultType="com.netposa.lucai.vo.CameraDTO">
         SELECT
-        a.* ,
-        b.NAME AS groupName ,
-        b.color
-        FROM camera a INNER JOIN `group` b
-        ON a.`GROUP` = b.id
+        a.*,
+        b. NAME AS groupName,
+        b.color,
+        IFNULL(c.cameraCount,1) as cameraCount
+        FROM
+        (
+        camera a
+        INNER JOIN `group` b ON a.`GROUP` = b.id
+        )
+        LEFT JOIN (
+        SELECT
+        cameraId,
+        count(*) AS cameraCount
+        FROM
+        camera_attr
+        GROUP BY
+        cameraId
+        ) c ON c.cameraId = a.id
         <where>
             <if test="search.groups != null and search.groups.size() > 0">
                 a.`group` in
@@ -184,7 +197,7 @@
             CODE,
             groupId
        FROM
-            `camera_attr`;
+            `camera_attr` where `cameraId` = #{id}
     </select>
 
     <select id="countCameraByGroup" resultType="java.lang.Integer">
