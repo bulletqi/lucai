@@ -190,14 +190,16 @@
 
     <select id="queryAttrs" resultType="com.netposa.lucai.vo.CameraAttr">
        SELECT
-            id AS attrId,
-            cameraId,
-            toward,
-            type,
-            CODE,
-            groupId
+            a.id AS attrId,
+            a.cameraId,
+            a.toward,
+            a.type,
+            a.CODE,
+            a.groupId,
+			b.`name` as groupName
        FROM
-            `camera_attr` where `cameraId` = #{id}
+            `camera_attr` a LEFT JOIN `group` b on a.groupId = b.id
+       where a.`cameraId` = #{id}
     </select>
 
     <select id="countCameraByGroup" resultType="java.lang.Integer">

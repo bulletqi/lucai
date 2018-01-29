@@ -12,4 +12,5 @@ public class CameraAttr {
 	protected String type ;
 	protected String code ;
 	protected Integer groupId ;
+	protected String groupName ;
 }
